@@ -1,0 +1,60 @@
+name: .NET CI
+
+on:
+    push:
+        branches:
+            - main
+    pull_request: 
+        branches:
+            - main
+
+
+
+jobs:
+    build-and-test:
+        runs-on: ubuntu-latest
+        env:
+          ConnectionStrings__DefaultConnection: ${{ secrets.CONNECTION_STRING }}
+
+        services:
+            sqlserver:
+                image: mcr.microsoft.com/mssql/server:2022-latest
+                env:
+                    SA_PASSWORD: ${{ secrets.SA_PASSWORD }}
+                    ACCEPT_EULA: "Y"
+                ports:
+                    - 1433:1433
+                options: >-
+                 --health-cmd "exit 0"
+
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v5.0.0
+
+            - name: Setup .NET Core SDK
+              uses: actions/setup-dotnet@v5.0.0
+              with:
+                dotnet-version: '9.0.0'
+
+            - name: Restore Dependencies
+              run: dotnet restore
+
+            - name: Build
+              run: dotnet build --no-restore
+
+            - name: Esperar a que SQL Server esté listo
+              run: |
+                    echo "Esperando que SQL Server arranque..."
+                    for i in {1..30}; do
+                    if /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "${{ secrets.SA_PASSWORD }}" -Q "SELECT 1" > /dev/null 2>&1; then
+                        echo "SQL Server listo!"
+                        break
+                    fi
+                    echo "Esperando..."
+                    sleep 5
+                    done
+
+
+            - name: Test
+              run: dotnet test --no-build --verbosity normal
