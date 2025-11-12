@@ -43,17 +43,18 @@ jobs:
             - name: Build
               run: dotnet build --no-restore
 
-            - name: Esperar a que SQL Server esté listo
+            - name: Esperar que SQL Server esté listo
               run: |
-                    echo "Esperando que SQL Server arranque..."
-                    for i in {1..30}; do
-                    if /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "${{ secrets.SA_PASSWORD }}" -Q "SELECT 1" > /dev/null 2>&1; then
-                        echo "SQL Server listo!"
-                        break
-                    fi
-                    echo "Esperando..."
-                    sleep 5
-                    done
+                echo "Esperando que SQL Server arranque..."
+                for i in {1..30}; do
+                  if nc -z localhost 1433; then
+                    echo "✅ SQL Server listo!"
+                    break
+                  fi
+                  echo "Esperando..."
+                  sleep 5
+                done
+
 
 
             - name: Test
