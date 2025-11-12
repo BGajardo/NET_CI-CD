@@ -20,13 +20,13 @@ namespace Test
             var mockRepo = new Mock<IProductRepository>();
             var service = new ProductService(mockRepo.Object);
 
-            var dto = null;
+            var dto = new AddProductDTO { Name = "Mouse", Price = 10 };
 
             
             await service.AddProductAsync(dto);
 
           
-            mockRepo.Verify(r => r.addAsync(It.IsAny<Product>()), Times.Once);
+            mockRepo.Verify(r => r.addAsync(It.IsAny<Product>()), Times.Never);
         }
     }
 }
