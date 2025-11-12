@@ -26,7 +26,7 @@ namespace Test
             await service.AddProductAsync(dto);
 
           
-            mockRepo.Verify(r => r.addAsync(It.IsAny<Product>()), Times.Never);
+            mockRepo.Verify(r => r.addAsync(It.IsAny<Product>()), Times.Once);
         }
     }
 }
