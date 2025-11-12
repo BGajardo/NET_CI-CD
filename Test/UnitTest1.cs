@@ -20,7 +20,7 @@ namespace Test
             var mockRepo = new Mock<IProductRepository>();
             var service = new ProductService(mockRepo.Object);
 
-            var dto = new AddProductDTO { Name = "Mouse", Price = 10 };
+            var dto = null;
 
             
             await service.AddProductAsync(dto);
