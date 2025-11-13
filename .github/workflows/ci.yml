@@ -41,7 +41,7 @@ jobs:
               run: dotnet restore
 
             - name: Build
-              run: dotnet build --no-restore
+              run: dotnet build --no-restore -v normal > build.log 2>&1
 
             - name: Esperar que SQL Server esté listo
               run: |
@@ -55,7 +55,13 @@ jobs:
                   sleep 5
                 done
 
-
-
             - name: Test
-              run: dotnet test --no-build --verbosity normal
+              run: dotnet test --no-build --verbosity normal > test.log 2>&1
+
+            - name: Artifact
+              uses: actions/upload-artifact@v3
+              with:
+                name: artifacts
+                path: |
+                  build.log
+                  test.log
