@@ -43,6 +43,7 @@ jobs:
                   test.log
 
             - name: Docker Build
+              working-directory: CI_CD
               run: docker build -t ci-cd:test .
 
             - name: Docker Compose Up
