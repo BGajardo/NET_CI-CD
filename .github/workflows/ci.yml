@@ -47,10 +47,12 @@ jobs:
               run: docker build -t ci-cd:test .
 
             - name: Docker Compose Up
+              working-directory: CI_CD
               run: |
                 docker compose up -d
                 sleep 10
 
             - name: Docker Compose Down
               if: always()
+              working-directory: CI_CD
               run: docker compose down -v

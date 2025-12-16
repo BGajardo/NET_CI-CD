@@ -13,7 +13,7 @@ RUN dotnet publish -c Release -o /app/publish
 
 # Etapa 2 -> Runtime
 
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 as final
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
 
 COPY --from=build /app/publish .
