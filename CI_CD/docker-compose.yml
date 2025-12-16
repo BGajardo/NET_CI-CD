@@ -1,0 +1,25 @@
+version: '3.9'
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - "ConnectionStrings__DefaultConnection=Server=db;Database=Products;User Id=sa;Password=SaPassword123!;Encrypt=True;TrustServerCertificate=True;"
+    depends_on:
+      - db
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+       ACCEPT_EULA: "Y"
+       SA_PASSWORD: "SaPassword123!"
+
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+
+volumes:
+  mssql_data:
+
