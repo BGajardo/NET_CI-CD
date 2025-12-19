@@ -23,7 +23,7 @@ jobs:
             - name: Deploy to VM
               env:
                 APP_VERSION: ${{ github.sha }}
-                CONNECTION_STRING: ${{ secrets.PROD_CONNECTION_STRING }}
+                CONNECTION_STRING: ${{ secrets.CONNECTION_STRING_PROD }}
                 SA_PASSWORD: ${{ secrets.SA_PASSWORD }}
               run: |
                 ssh ${{ secrets.VM_USER }}@${{ secrets.VM_IP }} << EOF
