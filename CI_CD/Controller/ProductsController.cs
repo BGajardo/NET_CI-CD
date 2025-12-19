@@ -31,13 +31,23 @@ using CI_CD.DTOs.Product;
 
             [HttpGet]
             public async Task<IActionResult> GetAll() {
-
+                
                 var products = await _productService.getAllProductsAsync();
-
+                
                 if (!products.Any())
-                    return NoContent(); 
+                    return NoContent();  
+       
+           
 
-                return Ok(products); 
+                var response = new
+                {
+                    success = true,
+                    message = "Productos obtenidos correctamente",
+                    total = products.Count(),
+                    data = products
+                };
+
+                return Ok(response); 
 
 
             }
