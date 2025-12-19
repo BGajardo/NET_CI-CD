@@ -21,14 +21,18 @@ jobs:
                 ssh-keyscan -H ${{ secrets.VM_IP }} >> ~/.ssh/known_hosts
 
             - name: Deploy to VM
+              env:
+                APP_VERSION: ${{ github.sha }}
+                CONNECTION_STRING: ${{ secrets.PROD_CONNECTION_STRING }}
+                SA_PASSWORD: ${{ secrets.SA_PASSWORD }}
               run: |
-                ssh ${{ secrets.VM_USER }}@${{ secrets.VM_IP }} << 'EOF'
+                ssh ${{ secrets.VM_USER }}@${{ secrets.VM_IP }} << EOF
                 cd /opt/app/NET_CI-CD/CI_CD
-                echo "APP_VERSION=${{ github.sha }}" > .env
-                echo "ConnectionStrings__DefaultConnection=${{ secrets.PROD_CONNECTION_STRING }}" >> .env
+                echo "APP_VERSION=$APP_VERSION" > .env
+                echo "ConnectionStrings__DefaultConnection=$CONNECTION_STRING" >> .env
+                echo "SA_PASSWORD=$SA_PASSWORD" >> .env
                 docker-compose pull
                 docker-compose --profile prod up -d
                 EOF
-
 
             
