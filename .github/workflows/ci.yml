@@ -47,15 +47,10 @@ jobs:
                 echo "CONNECTION_STRING=Server=db;Database=Products;User Id=sa;Password=SaPassword123!;TrustServerCertificate=True;" > .env
                 echo "SA_PASSWORD=SaPassword123!" >> .env
 
-
-            - name: Docker Build
-              working-directory: CI_CD
-              run: docker build -t ci-cd:test .
-
             - name: Docker Compose Up
               working-directory: CI_CD
               run: |
-                docker compose up -d
+                docker compose --profile local up -d
                 sleep 10
 
             - name: Docker Compose Down
