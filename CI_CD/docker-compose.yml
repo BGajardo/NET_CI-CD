@@ -35,7 +35,7 @@ services:
   # APP PROD 
   app-prod:
     profiles: ["prod"]
-    image: cockertest-h0fscufthzcgavc8.azurecr.io/ci_cd:latest
+    image: cockertest-h0fscufthzcgavc8.azurecr.io/ci_cd:${APP_VERSION}
     ports:
       - "8080:8080"
     environment:
@@ -46,7 +46,7 @@ services:
   # DB PROD
   db-prod:
     profiles: ["prod"]
-    image: cockertest-h0fscufthzcgavc8.azurecr.io/midb:latest
+    image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
       ACCEPT_EULA: "Y"
       SA_PASSWORD: ${SA_PASSWORD}

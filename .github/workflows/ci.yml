@@ -57,3 +57,25 @@ jobs:
               if: always()
               working-directory: CI_CD
               run: docker compose down -v
+
+            - name: Login to ACR
+              run: |
+                echo "${{ secrets.ACR_PASSWORD }}" | docker login \
+                  ${{ secrets.ACR_LOGIN_SERVER }} \
+                  -u ${{ secrets.ACR_USERNAME }} \
+                  --password-stdin
+
+            - name: Build Docker image
+              run: |
+                IMAGE=${{ secrets.ACR_LOGIN_SERVER }}/ci_cd
+                TAG=${{ github.sha }}
+
+                docker build -t $IMAGE:$TAG -t $IMAGE:latest .
+
+            - name: Push Docker image
+              run: |
+                IMAGE=${{ secrets.ACR_LOGIN_SERVER }}/ci_cd
+                TAG=${{ github.sha }}
+
+                docker push $IMAGE:$TAG
+                docker push $IMAGE:latest

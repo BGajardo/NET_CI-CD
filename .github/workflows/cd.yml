@@ -1,0 +1,34 @@
+name: CD deploy azure
+
+on:
+  workflow_run:
+    workflows: [".NET CI"]
+    types:
+      - completed
+
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+
+        steps:
+           
+            - name: Setup SSH
+              run: |
+                mkdir -p ~/.ssh
+                echo "${{ secrets.VM_SSH_KEY }}" > ~/.ssh/id_ed25519
+                chmod 600 ~/.ssh/id_ed25519
+                ssh-keyscan -H ${{ secrets.VM_IP }} >> ~/.ssh/known_hosts
+
+            - name: Deploy to VM
+              run: |
+                ssh ${{ secrets.VM_USER }}@${{ secrets.VM_IP }} << 'EOF'
+                cd /opt/app/NET_CI-CD/CI_CD
+                echo "APP_VERSION=${{ github.sha }}" > .env
+                echo "ConnectionStrings__DefaultConnection=${{ secrets.PROD_CONNECTION_STRING }}" >> .env
+                docker compose pull
+                docker compose --profile prod up -d
+                EOF
+
+
+            
