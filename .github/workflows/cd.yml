@@ -31,8 +31,8 @@ jobs:
                 echo "APP_VERSION=$APP_VERSION" > .env
                 echo "CONNECTION_STRING=$CONNECTION_STRING" >> .env
                 echo "SA_PASSWORD=$SA_PASSWORD" >> .env
-                docker-compose pull
-                docker-compose --profile prod up -d
+                docker compose pull
+                docker compose --profile prod up -d
                 EOF
 
             
