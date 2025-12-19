@@ -17,3 +17,7 @@ appsettings.Development.json
 # Paquetes
 *.nupkg
 packages/
+
+# env
+.env
+.env.prod

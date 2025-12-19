@@ -25,7 +25,7 @@ jobs:
                 dotnet-version: '9.0.x'
 
             - name: Restore Dependencies
-              run: dotnet restore
+              run: dotnet restore 
 
             - name: Build
               run: dotnet build --no-restore -v normal > build.log 2>&1
@@ -41,6 +41,12 @@ jobs:
                 path: |
                   build.log
                   test.log
+            - name: Create env file for CI
+              working-directory: CI_CD
+              run: |
+                echo "CONNECTION_STRING=Server=db;Database=Products;User Id=sa;Password=SaPassword123!;TrustServerCertificate=True;" > .env
+                echo "SA_PASSWORD=SaPassword123!" >> .env
+
 
             - name: Docker Build
               working-directory: CI_CD
