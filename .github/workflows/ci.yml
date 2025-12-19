@@ -70,7 +70,7 @@ jobs:
                 IMAGE=${{ secrets.ACR_LOGIN_SERVER }}/ci_cd
                 TAG=${{ github.sha }}
 
-                docker build -t $IMAGE:$TAG -t $IMAGE:latest .
+                docker build -t $IMAGE:$TAG -t $IMAGE:latest ./CI_CD
 
             - name: Push Docker image
               run: |
