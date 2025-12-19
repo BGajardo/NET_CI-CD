@@ -29,7 +29,7 @@ jobs:
                 ssh ${{ secrets.VM_USER }}@${{ secrets.VM_IP }} << EOF
                 cd /opt/app/NET_CI-CD/CI_CD
                 echo "APP_VERSION=$APP_VERSION" > .env
-                echo "ConnectionStrings__DefaultConnection=$CONNECTION_STRING" >> .env
+                echo "CONNECTION_STRING=$CONNECTION_STRING" >> .env
                 echo "SA_PASSWORD=$SA_PASSWORD" >> .env
                 docker-compose pull
                 docker-compose --profile prod up -d
